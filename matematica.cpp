@@ -6,38 +6,38 @@ typedef pair<int, int> Factor;
 typedef long long Long;
 
 vector<Factor> FactoresPrimos(int a) {
-	int conteo = 0;
-	vector<Factor> factores;
-	while (!(a & 1)) ++conteo, a >>= 1;
-	if (conteo) factores.push_back(
-		Factor(2, conteo)), conteo = 0;
+    int conteo = 0;
+    vector<Factor> factores;
+    while (!(a & 1)) ++conteo, a >>= 1;
+    if (conteo) factores.push_back(
+        Factor(2, conteo)), conteo = 0;
 
-	int raiz = sqrt(a);
-	for (int i = 3; i <= raiz; i += 2) {
-		while (!(a % i)) ++conteo, a /= i;
-		if (conteo) factores.push_back(
-			Factor(i, conteo)), conteo = 0;
-	}
-	if (a > 1) factores.push_back(
-		Factor(a, 1));
-	return factores;
+    int raiz = sqrt(a);
+    for (int i = 3; i <= raiz; i += 2) {
+        while (!(a % i)) ++conteo, a /= i;
+        if (conteo) factores.push_back(
+            Factor(i, conteo)), conteo = 0;
+    }
+    if (a > 1) factores.push_back(
+        Factor(a, 1));
+    return factores;
 }
 
 // Criba de Eratostenes de 1 a n.
 vector<int> Criba(int n) {
-	int raiz = sqrt(n); vector<int> criba(n + 1);
-	for (int i = 4; i <= n; i += 2) criba[i] = 2;
-	for (int i = 3; i <= raiz; i += 2) if (!criba[i])
-		for (int j = i * i; j <= n; j += i)
-			if (!criba[j]) criba[j] = i;
-	return criba;
+    int raiz = sqrt(n); vector<int> criba(n + 1);
+    for (int i = 4; i <= n; i += 2) criba[i] = 2;
+    for (int i = 3; i <= raiz; i += 2) if (!criba[i])
+        for (int j = i * i; j <= n; j += i)
+            if (!criba[j]) criba[j] = i;
+    return criba;
 }
 
 Long get_powers(Long n, Long p) {
     Long res = 0;
     while (n != 0) {
-    	res += n/p;
-    	n = n/p;
+        res += n/p;
+        n = n/p;
     }
     return res;
 }
@@ -46,14 +46,14 @@ Long get_powers(Long n, Long p) {
 // El vector de primos debe estar ordenado.
 
 vector<Factor> FactoresFactorial(
-	int n, const vector<int>& primos) {
+    int n, const vector<int>& primos) {
 
-	vector<Factor> factores;
-	for (int i = 0; i < primos.size(); ++i) {
-		if (n < primos[i]) break; int p = primos[i];
-		factores.push_back(Factor(primos[i], get_powers(n, p)));
-	}
-	return factores;
+    vector<Factor> factores;
+    for (int i = 0; i < primos.size(); ++i) {
+        if (n < primos[i]) break; int p = primos[i];
+        factores.push_back(Factor(primos[i], get_powers(n, p)));
+    }
+    return factores;
 }
 
 // Exponenciacion binaria a^n mod m.
@@ -95,57 +95,57 @@ Long Euclides(Long a, Long b,
     Long gcd = Euclides(b, a % b, x, y, mod);
 
     x = !mod? x - y * (a / b): (mod +
-    	x - (y * (a / b)) % mod) % mod;
+        x - (y * (a / b)) % mod) % mod;
     swap(x, y); return gcd;
 }
 
 // Tipo de dato para operar fracciones.
 
 struct Fraccion {
-	Long num, den;
-	Fraccion() : num(0), den(1) {}
-	Fraccion(Long n, Long d) {
-		if (d < 0) n = -n, d = -d;
-		Long gcd = __gcd(abs(n), abs(d));
-		num = n / gcd, den = d / gcd;
-	}
+    Long num, den;
+    Fraccion() : num(0), den(1) {}
+    Fraccion(Long n, Long d) {
+        if (d < 0) n = -n, d = -d;
+        Long gcd = __gcd(abs(n), abs(d));
+        num = n / gcd, den = d / gcd;
+    }
 
-	Fraccion operator-() const {
-		return Fraccion(-num, den);
-	}
+    Fraccion operator-() const {
+        return Fraccion(-num, den);
+    }
 
-	Fraccion operator+(const Fraccion& f) {
-		Long gcd = __gcd(den, f.den);
-		return Fraccion(
-			num * (f.den / gcd) +
-			f.num * (den / gcd),
-			den * (f.den / gcd)
-		);
-	}
+    Fraccion operator+(const Fraccion& f) {
+        Long gcd = __gcd(den, f.den);
+        return Fraccion(
+            num * (f.den / gcd) +
+            f.num * (den / gcd),
+            den * (f.den / gcd)
+        );
+    }
 
-	Fraccion operator-(const Fraccion& f) {
-		return *this + -f; // a - b = a + (-b)
-	}
+    Fraccion operator-(const Fraccion& f) {
+        return *this + -f; // a - b = a + (-b)
+    }
 
-	Fraccion operator*(const Fraccion& f) {
-		return Fraccion(num * f.num, den * f.den);
-	}
+    Fraccion operator*(const Fraccion& f) {
+        return Fraccion(num * f.num, den * f.den);
+    }
 
-	Fraccion operator/(const Fraccion& f) {
-		return Fraccion(num * f.den, den * f.num);
-	}
+    Fraccion operator/(const Fraccion& f) {
+        return Fraccion(num * f.den, den * f.num);
+    }
 
-	bool operator<(const Fraccion& cmp) {
-		Long gcd = __gcd(den, cmp.den);
-		return num * (cmp.den / gcd) <
-			   cmp.num * (den / gcd);
-	}
+    bool operator<(const Fraccion& cmp) {
+        Long gcd = __gcd(den, cmp.den);
+        return num * (cmp.den / gcd) <
+               cmp.num * (den / gcd);
+    }
 
-	bool operator==(const Fraccion& cmp) {
-		Long gcd = __gcd(den, cmp.den);
-		return num * (cmp.den / gcd) ==
-			   cmp.num * (den / gcd);
-	}
+    bool operator==(const Fraccion& cmp) {
+        Long gcd = __gcd(den, cmp.den);
+        return num * (cmp.den / gcd) ==
+               cmp.num * (den / gcd);
+    }
 };
 
 // Eliminacion Gaussiana de matrices.
@@ -157,11 +157,11 @@ typedef vector<Vector> Matriz;
 // Para eliminacion con fracciones.
 
 Fraccion fabs(const Fraccion& f) {
-	return Fraccion(abs(f.num), f.den);
+    return Fraccion(abs(f.num), f.den);
 }
 
 bool EsCero(const Fraccion& f) {
-	return f.num == 0;
+    return f.num == 0;
 }
 
 // Para eliminacion con flotantes.
@@ -178,36 +178,36 @@ bool EsCero(double a) {
 
 int solved = 0;
 void Gauss(Matriz& m) {
-	int columna = 0;
-	for (int i = 0; i < m.size(); ++i) {
-		if (columna >= m[0].size()) break;
-		bool col_cero = true; // Toda la columna tiene ceros
-		
-		for (int j = i; j < m.size() && col_cero; ++j)
-			if (!EsCero(m[j][columna])) col_cero = false;
+    int columna = 0;
+    for (int i = 0; i < m.size(); ++i) {
+        if (columna >= m[0].size()) break;
+        bool col_cero = true; // Toda la columna tiene ceros
+        
+        for (int j = i; j < m.size() && col_cero; ++j)
+            if (!EsCero(m[j][columna])) col_cero = false;
 
-		if (col_cero) {
-			columna++, i--;
-			continue;
-		}
+        if (col_cero) {
+            columna++, i--;
+            continue;
+        }
 
-		int fila_mayor = i;
-		for (int j = i; j < m.size(); ++j)
-			if (fabs(m[fila_mayor][columna]) <
-				fabs(m[j][columna])) fila_mayor = j;
-			swap(m[i], m[fila_mayor]);
+        int fila_mayor = i;
+        for (int j = i; j < m.size(); ++j)
+            if (fabs(m[fila_mayor][columna]) <
+                fabs(m[j][columna])) fila_mayor = j;
+            swap(m[i], m[fila_mayor]);
 
-		if (EsCero(m[i][columna])) continue;
-		solved++;
-		for (int j = m[i].size() - 1; j >= i; --j)
-			m[i][j] = m[i][j] / m[i][columna];
-		for (int j = 0; j < m.size(); ++j) {
-			if (i == j || EsCero(m[j][columna])) continue;
-			for (int k = m[j].size() - 1; k >= i; --k)
-				m[j][k] = m[j][k] - m[i][k] * m[j][columna];
-		}
-		columna++;
-	}
+        if (EsCero(m[i][columna])) continue;
+        solved++;
+        for (int j = m[i].size() - 1; j >= i; --j)
+            m[i][j] = m[i][j] / m[i][columna];
+        for (int j = 0; j < m.size(); ++j) {
+            if (i == j || EsCero(m[j][columna])) continue;
+            for (int k = m[j].size() - 1; k >= i; --k)
+                m[j][k] = m[j][k] - m[i][k] * m[j][columna];
+        }
+        columna++;
+    }
 }
 // Tipo de dato para operar numeros complejos.
 
