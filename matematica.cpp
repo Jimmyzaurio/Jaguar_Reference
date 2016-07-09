@@ -24,7 +24,6 @@ vector<Factor> FactoresPrimos(int a) {
 }
 
 // Criba de Eratostenes de 1 a n.
-
 vector<int> Criba(int n) {
 	int raiz = sqrt(n); vector<int> criba(n + 1);
 	for (int i = 4; i <= n; i += 2) criba[i] = 2;
