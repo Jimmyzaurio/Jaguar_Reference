@@ -2,8 +2,8 @@
 using namespace std;
 
 // Factores primos de un numero a.
-
 typedef pair<int, int> Factor;
+typedef long long Long;
 
 vector<Factor> FactoresPrimos(int a) {
 	int conteo = 0;
@@ -34,6 +34,15 @@ vector<int> Criba(int n) {
 	return criba;
 }
 
+Long get_powers(Long n, Long p) {
+    Long res = 0;
+    while (n != 0) {
+    	res += n/p;
+    	n = n/p;
+    }
+    return res;
+}
+
 // Factores primos de n factorial (n!).
 // El vector de primos debe estar ordenado.
 
@@ -43,9 +52,7 @@ vector<Factor> FactoresFactorial(
 	vector<Factor> factores;
 	for (int i = 0; i < primos.size(); ++i) {
 		if (n < primos[i]) break; int p = primos[i];
-		int reps = n / p; while (primos[i] <= n / p)
-			p *= primos[i], reps += n / p;
-		factores.push_back(Factor(primos[i], reps));
+		factores.push_back(Factor(primos[i], get_powers(n, p)));
 	}
 	return factores;
 }
@@ -170,27 +177,39 @@ bool EsCero(double a) {
 // requieran sacar una matriz inversa) simplemente
 // comenten o borren la seccion <comment>.
 
-void EliminacionGaussiana(Matriz& m) {
-    for (int i = 0; i < m.size(); ++i) {
-    	// <comment>
-        int fila_mayor = i;
-        for (int j = i + 1; j < m.size(); ++j)
-            if (fabs(m[fila_mayor][i]) <
-                fabs(m[j][i])) fila_mayor = j;
-        swap(m[i], m[fila_mayor]);
-        // </comment>
+int solved = 0;
+void Gauss(Matriz& m) {
+	int columna = 0;
+	for (int i = 0; i < m.size(); ++i) {
+		if (columna >= m[0].size()) break;
+		bool col_cero = true; // Toda la columna tiene ceros
+		
+		for (int j = i; j < m.size() && col_cero; ++j)
+			if (!EsCero(m[j][columna])) col_cero = false;
 
-        if (EsCero(m[i][i])) continue;
-        for (int j = m[i].size() - 1; j >= i; --j)
-            m[i][j] = m[i][j] / m[i][i];
-        for (int j = 0; j < m.size(); ++j) {
-            if (i == j || EsCero(m[j][i])) continue;
-            for (int k = m[j].size() - 1; k >= i; --k)
-                m[j][k] = m[j][k] - m[i][k] * m[j][i];
-        }
-    }
+		if (col_cero) {
+			columna++, i--;
+			continue;
+		}
+
+		int fila_mayor = i;
+		for (int j = i; j < m.size(); ++j)
+			if (fabs(m[fila_mayor][columna]) <
+				fabs(m[j][columna])) fila_mayor = j;
+			swap(m[i], m[fila_mayor]);
+
+		if (EsCero(m[i][columna])) continue;
+		solved++;
+		for (int j = m[i].size() - 1; j >= i; --j)
+			m[i][j] = m[i][j] / m[i][columna];
+		for (int j = 0; j < m.size(); ++j) {
+			if (i == j || EsCero(m[j][columna])) continue;
+			for (int k = m[j].size() - 1; k >= i; --k)
+				m[j][k] = m[j][k] - m[i][k] * m[j][columna];
+		}
+		columna++;
+	}
 }
-
 // Tipo de dato para operar numeros complejos.
 
 struct Complejo {
