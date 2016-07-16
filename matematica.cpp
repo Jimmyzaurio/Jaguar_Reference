@@ -209,6 +209,27 @@ void Gauss(Matriz& m) {
         columna++;
     }
 }
+
+typedef vector<long double> Vector;
+typedef vector<Vector> Matriz;
+
+long double Determinante(Matriz& m) {
+	int conta = 0;
+	for (int i = 0; i < m.size(); ++i) {
+		for (int j = i + 1; j < m.size(); ++j) {
+			long double alfa = m[j][i] / m[i][i];
+			for (int k = m[j].size() - 1; k >= i; --k)
+				m[j][k] = m[j][k] - (m[i][k] * alfa);
+		}
+	}
+	long double deter = 1;
+	for (int i = 0; i < m.size(); ++i)
+		deter = deter * m[i][i];
+	return deter;
+}
+
+
+
 // Tipo de dato para operar numeros complejos.
 
 struct Complejo {
