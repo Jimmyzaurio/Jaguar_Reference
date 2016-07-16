@@ -213,7 +213,7 @@ void Gauss(Matriz& m) {
 typedef vector<long double> Vector;
 typedef vector<Vector> Matriz;
 
-long double Gauss(Matriz& m) {
+long double Determinante(Matriz& m) {
     int conta = 0;
     for (int i = 0; i < m.size(); ++i) {
         for (int j = i + 1; j < m.size(); ++j) {
