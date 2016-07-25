@@ -4,7 +4,8 @@ using namespace std;
 typedef long long Long;
 
 // Lowest Common Ancestor
-// pb al vector g
+// Tratar como si fuera grafo con
+// lista de adyacencia
 // Construir(n)
 // LCA(u, v)
 #define MAXN 100007
