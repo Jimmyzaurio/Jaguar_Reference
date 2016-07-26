@@ -142,16 +142,16 @@ struct Grafo {
 
     vector<bool> vis;
     vector<int> ordenados;
-    vector<int> usando;
+    vector<int> usando; // Detectar ciclo
     bool ciclo;
 
     void OrdenTopologico(int u) {
         vis[u] = true;
-        usando[u] = true;
+        usando[u] = true; // Detectar ciclo
         for (int v : ady[u])
             if (!vis[v]) OrdenTopologico(v);
         	else if (usando[v]) ciclo = true;
-        usando[u] = false;
+        usando[u] = false; // Detectar ciclo
         ordenados.push_back(u);
     }
 
@@ -159,7 +159,7 @@ struct Grafo {
         ordenados.clear();
         ciclo = false;
         vis = vector<bool>(n);
-        usando = vector<int>(n);
+        usando = vector<int>(n); // Ciclo
         for (int u = 0; u < n; ++u)
             if (!vis[u]) OrdenTopologico(u);
     }
