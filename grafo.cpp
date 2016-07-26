@@ -142,21 +142,27 @@ struct Grafo {
 
     vector<bool> vis;
     vector<int> ordenados;
+    vector<int> usando;
+    bool ciclo;
 
     void OrdenTopologico(int u) {
         vis[u] = true;
+        usando[u] = true;
         for (int v : ady[u])
             if (!vis[v]) OrdenTopologico(v);
+        	else if (usando[v]) ciclo = true;
+        usando[u] = false;
         ordenados.push_back(u);
     }
 
     void OrdenTopologico() {
         ordenados.clear();
+        ciclo = false;
         vis = vector<bool>(n);
+        usando = vector<int>(n);
         for (int u = 0; u < n; ++u)
             if (!vis[u]) OrdenTopologico(u);
     }
-
     // Busqueda en amplitud desde el nodo s.
     // Devuelve el vector de distancias a todos
     // los nodos desde s. Un valor INF indica que
