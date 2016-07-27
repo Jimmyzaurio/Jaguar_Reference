@@ -84,7 +84,8 @@ struct Grafo {
                     articulacion[u] = true;
                 low[u] = min(low[u], low[v]);
             }
-            low[u] = min(low[u], label[v]);
+            low[u] = min(low[u], 
+                         label[v]);
         }
         return hijos;
     }
