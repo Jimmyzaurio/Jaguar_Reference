@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-typedef int Costo;
+typedef int Costo; //Ponderado y BFS
 typedef pair<int, int> Arista;
 
 const Costo INF = 1 << 30;
