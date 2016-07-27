@@ -151,7 +151,7 @@ struct Grafo {
         usando[u] = true; // Detectar ciclo
         for (int v : ady[u])
             if (!vis[v]) OrdenTopologico(v);
-        	else if (usando[v]) ciclo = true;
+            else if (usando[v]) ciclo = true; //ciclo
         usando[u] = false; // Detectar ciclo
         ordenados.push_back(u);
     }
