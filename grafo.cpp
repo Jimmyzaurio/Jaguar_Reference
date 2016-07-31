@@ -216,6 +216,18 @@ struct UnionFind {
     int Tamano(int u) {
         return tam[Raiz(u)];
     }
+    
+        // No. de conjuntos con tam > 1
+    int islas() {
+        set<int> S;
+        for (int i = 0; i < padre.size(); i++)
+            S.insert(Raiz(i));
+        int ans = 0;
+        for (auto var : S)
+            if (Tamano(var) > 1)
+                ans++;
+        return ans;
+    }
 };
 
 typedef pair<Costo, int> CostoNodo;
