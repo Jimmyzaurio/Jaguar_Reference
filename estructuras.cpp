@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 
 const int INF = 1 << 30;
-
+typedef long long Long;
 // Segment Tree version dinamica. Para generar el
 // arbol completo deben llamar a la funcion Construir.
 // CUIDADO: Para usarlo deben especificar el tipo de
@@ -78,7 +78,7 @@ struct BIT {
     }
 
     Long Query(int i) {
-        long long sum = 0;
+        Long sum = 0;
         while (i > 0) {
             sum += tree[i];
             i -= i & -i;
