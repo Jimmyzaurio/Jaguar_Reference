@@ -107,7 +107,8 @@ struct BIT2D {
         return Query(t, r) - Query(t, l - 1)
         - Query(b - 1, r) + Query(b - 1, l - 1);
     }
-
+    
+    // y -> fila   x -> columna
     Long Query(int y, int x) {
         Long ans = 0;
         for (int i = y; i > 0; i -= i & -i)
@@ -119,5 +120,4 @@ struct BIT2D {
 
 int main() {
     return 0;
-}
 }
