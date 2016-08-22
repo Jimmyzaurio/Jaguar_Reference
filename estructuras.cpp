@@ -134,7 +134,7 @@ struct BIT3D {
             ans += cubo[i].Query(y, x);
         return ans;
     }
-
+    // b -> bottom    t -> top
     Long Volumen(int xb, int yb, int zb, int xt, int yt, int zt) {
         return Query(zt, yt, xt)        
              - Query(zt, yt, xb - 1)
