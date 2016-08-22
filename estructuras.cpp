@@ -118,6 +118,36 @@ struct BIT2D {
     }
 };
 
+
+struct BIT3D {
+    vector<BIT2D> cubo;
+    BIT3D(int n) : cubo(n + 1, BIT2D(n)) {}
+
+    void Actualizar(int z, int y, int x, int a) {
+        for (int i = z; i < cubo.size(); i += i & -i)
+            cubo[i].Actualizar(y, x, a);
+    }
+
+    Long Query(int z, int y, int x) {
+        Long ans = 0;
+        for (int i = z; i > 0; i -= i & -i)
+            ans += cubo[i].Query(y, x);
+        return ans;
+    }
+
+    Long Volumen(int xb, int yb, int zb, int xt, int yt, int zt) {
+        return Query(zt, yt, xt)        
+             - Query(zt, yt, xb - 1)
+             - Query(zt, yb - 1, xt)
+             + Query(zt, yb - 1, xb - 1)        
+             - Query(zb - 1, yt, xt)
+             + Query(zb - 1, yt, xb - 1)
+             + Query(zb - 1, yb - 1, xt)
+             - Query(zb - 1, yb - 1, xb - 1);
+    }
+};
+
+
 int main() {
     return 0;
 }
