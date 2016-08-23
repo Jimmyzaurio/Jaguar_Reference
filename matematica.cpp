@@ -229,30 +229,32 @@ long double Determinante(Matriz& m) {
 }
 // Check if AxB = C  O(n^2)
 bool Freivalds(Matriz &a, Matriz &b, Matriz &c) {
-    int n = a.size();
-    vector<Long> abr(n), cr(n), r(n), br(n);
-    int T = 10;
-    bool flag = true;
-    while (T-- && flag) {
-        for (int i = 0; i < n; ++i)
-            r[i] = rand();
-        
-        for (int i = 0; i < n; ++i)
-            for (int j = 0; j < n; ++j) {
-                br[i] += r[j] * b[i][j];
-                cr[i] += r[j] * c[i][j];
-            }
-        
-        for (int i = 0; i < n; ++i)
-            for (int j = 0; j < n; ++j)
-                abr[i] += br[j] * a[i][j];
+	int n = a.size();
+	vector<Long> abr(n), cr(n), r(n), br(n);
+	int T = 10;
+	bool flag = true;
+	while (T-- && flag) {
+		for (int i = 0; i < n; ++i) {
+			r[i] = rand();
+			br[i] = abr[i] = cr[i] = 0;
+		}
+		for (int i = 0; i < n; ++i) {
+			for (int j = 0; j < n; ++j) {
+				br[i] += r[j] * b[i][j];
+				cr[i] += r[j] * c[i][j];
+			}
+		}
+		for (int i = 0; i < n; ++i)
+			for (int j = 0; j < n; ++j)
+				abr[i] += br[j] * a[i][j];
 
-        for (int i = 0; i < n; i++)
-            if (cr[i] != abr[i])
-                flag = false;
-    }
-    return flag;
+		for (int i = 0; i < n; i++)
+			if (cr[i] != abr[i])
+				flag = false;
+	}
+	return flag;
 }
+
 
 
 // Tipo de dato para operar numeros complejos.
