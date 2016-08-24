@@ -232,7 +232,7 @@ int main() {
 				int idx_ciclo = g.parte_ciclo[a];
 				int posA = lower_bound(ciclos[idx_ciclo].begin(), ciclos[idx_ciclo].end(), a) - ciclos[idx_ciclo].begin();
 				int posB = lower_bound(ciclos[idx_ciclo].begin(), ciclos[idx_ciclo].end(), b) - ciclos[idx_ciclo].begin();
-				//cout << "ciclo " << min((int)ciclos[idx_ciclo].size() - abs(posB - posA), abs(posA - posB));
+				//cout << "ciclo " << min((int)ciclos[idx_ciclo].size() - abs(posB - posA), abs(posA - posB)) << "\n";
 				cout << min((int)ciclos[idx_ciclo].size() - abs(posB - posA), abs(posA - posB)) << "\n";
 				continue;
 			}
@@ -258,18 +258,19 @@ int main() {
 
 			if (g.parte_ciclo[a] == -1 && g.parte_ciclo[b] == -1) {
 				// Arboles diferentes
-				if (g.parte_ciclo[a] != g.parte_ciclo[b]) {
+				//cout << "   " << g.raices[a] << " " << g.raices[b] << endl;
+				if (g.raices[a] != g.raices[b]) {
 					int raizA = g.raices[a];
 					int raizB = g.raices[b];
-					int idx_ciclo = g.parte_ciclo[a];
+					int idx_ciclo = g.parte_ciclo[raizA];
 					int posA = lower_bound(ciclos[idx_ciclo].begin(), ciclos[idx_ciclo].end(), raizA) - ciclos[idx_ciclo].begin();
 					int posB = lower_bound(ciclos[idx_ciclo].begin(), ciclos[idx_ciclo].end(), raizB) - ciclos[idx_ciclo].begin();
 					int centro = min((int)ciclos[idx_ciclo].size() - abs(posB - posA), abs(posA - posB));
 					//cout << "diff arboles " << g.depth[a] + g.depth[b] + centro << "\n";
 					cout << g.depth[a] + g.depth[b] + centro << "\n";
 				} else { // LCA
+					//cout << "LCA ";
 					cout << g.depth[a] + g.depth[b] - 2*g.depth[g.LCA(a, b)] << "\n";
-					//cout << "LCA\n";
 				}
 			}
 		}
@@ -311,5 +312,16 @@ int main() {
 14 18
 9 11
 19 14
+
+ans:
+1
+4
+4
+6
+5
+4
+1
+4
+
 
 */
