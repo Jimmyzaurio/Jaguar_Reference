@@ -233,7 +233,7 @@ int main() {
 				int posA = lower_bound(ciclos[idx_ciclo].begin(), ciclos[idx_ciclo].end(), a) - ciclos[idx_ciclo].begin();
 				int posB = lower_bound(ciclos[idx_ciclo].begin(), ciclos[idx_ciclo].end(), b) - ciclos[idx_ciclo].begin();
 				//cout << "ciclo " << min((int)ciclos[idx_ciclo].size() - abs(posB - posA), abs(posA - posB));
-				cout << min((int)ciclos[idx_ciclo].size() - abs(posB - posA), abs(posA - posB));
+				cout << min((int)ciclos[idx_ciclo].size() - abs(posB - posA), abs(posA - posB)) << "\n";
 				continue;
 			}
 			// Ciclo y arbol
@@ -276,6 +276,13 @@ int main() {
 	}
 }
 /*
+3
+2 1 2
+3
+1 2
+1 3
+1 1
+
 7
 2 1 4 5 3 5 6
 5
@@ -284,5 +291,13 @@ int main() {
 7 4
 6 2
 2 1
+
+6
+2 3 1 5 6 4
+4
+1 2
+6 1
+5 4
+3 2
 
 */
