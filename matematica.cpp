@@ -227,7 +227,9 @@ long double Determinante(Matriz& m) {
         deter = deter * m[i][i];
     return deter;
 }
-// Check if AxB = C  O(n^2)
+
+// Comprueba si AxB = C  O(n^2)
+// Recuerda poner srand(time(0)) en el main
 bool Freivalds(Matriz &a, Matriz &b, Matriz &c) {
 	int n = a.size();
 	vector<Long> abr(n), cr(n), r(n), br(n);
