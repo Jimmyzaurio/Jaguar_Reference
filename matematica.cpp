@@ -237,7 +237,7 @@ bool Freivalds(Matriz &a, Matriz &b, Matriz &c) {
 	bool flag = true;
 	while (T-- && flag) {
 		for (int i = 0; i < n; ++i) {
-			r[i] = rand();
+			r[i] = rand() % 2;
 			br[i] = abr[i] = cr[i] = 0;
 		}
 		for (int i = 0; i < n; ++i) {
