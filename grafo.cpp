@@ -335,6 +335,29 @@ struct GrafoPonderado {
     }
 };
 
+//Topological sort kahn algoritm
+//Ojo: Sólo funciona con DAG
+typedef vector<int> vi;
+const int MAX = 1000;
+vi indegree;
+vi ts;
+vi grafo[MAX];
+
+void kahn(int N){
+  priority_queue<int, vector<int>, greater<int>> Q;
+  for (int i = 0; i < N; i++)
+  	if (indegree[i] == 0) Q.push(i);
+  
+  while (!Q.empty()){
+  	int u = Q.top(); Q.pop();
+  	ts.push_back(u);
+  	for (auto v : grafo[u]){
+ 	  indegree[v]--;
+ 	  if (indegree[v] == 0) Q.push(v);
+  	}
+  }
+}
+
 int main() {
     return 0;
 }
