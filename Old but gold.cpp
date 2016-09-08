@@ -644,7 +644,7 @@ int tsp(int pos, int mask){
 }
 
 
-///////////////////////////////////////// Chuy ///////////////////////////
+/*********************************** Chuy **************************/
 Writing
 Buscar una permutación de una cadena en otra, dicha permutación
 debe ser una subcadena. 
