@@ -235,6 +235,59 @@ struct BIT3D {
     }
 };
 
+// Trie 
+// (t->sig.find(i) != t->sig.end())
+vector<char> resp;
+
+struct Trie{
+bool es_palabra;
+    map<int, Trie*> sig;
+
+    Trie() : es_palabra(false) {}
+
+    void Agregar(const string& str) {
+        Trie* cabeza = this;
+        for(int i=0; i<str.size(); ++i){
+            if( cabeza->sig.find(str[i]-'a') == cabeza->sig.end() )
+                cabeza->sig[str[i]-'a'] = new Trie();
+            cabeza = cabeza->sig[str[i]-'a'];
+        }
+        cabeza->es_palabra = true;
+    }
+};
+
+void Imprimir(Trie* t) {
+    if (t->es_palabra)
+        resp.push_back('P');
+    for (int i = 0; i < 26; ++i)
+        if (t->sig.find(i) != t->sig.end()) {
+            resp.push_back((char)(i + 'a'));
+            Imprimir(t->sig[i]);
+            resp.push_back('-');
+        }
+}
+
+void Solucion(Trie* t, int index) {
+    int aux;
+    if (t->es_palabra)
+        resp.push_back('P');
+    for (int i = 0; i < 26; i++) {
+        if (t->sig.find(i) != t->sig.end()) {           
+            if ((char)(i + 'a') == mayor[index])
+                aux = i;
+            else {
+                resp.push_back((char)(i + 'a'));
+                Imprimir(t->sig[i]);
+                resp.push_back('-');
+            }
+        }
+    }
+    if (index < mayor.size()) {
+        resp.push_back((char)(aux + 'a'));
+        Solucion(t->sig[aux], index + 1);   
+    }
+}
+
 
 int main() {
     return 0;
