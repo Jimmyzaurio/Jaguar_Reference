@@ -573,6 +573,183 @@ int main() {
   return 0;
 }
 
+Go-- 3er RPC
+
+#include <iostream>
+using namespace std;
+
+/*
+
+Problema: dada una matriz  de NxN con fichas malas y fichas buenas,
+          cuenta  cuantas  submatrices  cuadradas hay con al menos
+          una ficha buena pero que no contengan ninguna ficha mala.
+
+Observación clave:
+
+  Sea fst[i][j] la menor k tal que el cuadrado de tamaño
+  k con esquina (i,j) contenga una ficha buena, o min(i,j) de lo contrario.
+
+  Por otra parte, sea lst[i][j] la menor k tal que el cuadrado de tamaño
+  k con esquina (i,j) contenga una ficha mala, o min(i,j) de lo contrario.
+
+  Podemos observar que, entonces, todos los cuadrados de tamaño k con esquina
+  (i,j) tales que fst[i][j]≤k<lst[i][j] son válidos.
+
+*/
+
+
+const int A = 501;
+
+int num[A][A];
+int fst[A][A];
+int lst[A][A];
+int N, T;
+int G, E;
+
+int sqrGood(int i, int j) {
+  if (i <  0 || j < 0 || num[i][j] == G)
+    return 0;
+  if (fst[i][j] >= 0)
+    return fst[i][j];
+  return fst[i][j] = 1 + min(sqrGood(i - 1, j    ),
+                         min(sqrGood(i    , j - 1),
+                             sqrGood(i - 1, j - 1)));
+}
+
+int sqrEvil(int i, int j) {
+  if (i <  0 || j < 0 || num[i][j] == E)
+    return 0;
+  if (lst[i][j] >= 0)
+    return lst[i][j];
+  return lst[i][j] = 1 + min(sqrEvil(i - 1, j    ),
+                         min(sqrEvil(i    , j - 1),
+                             sqrEvil(i - 1, j - 1)));
+}
+
+int countSqrs(int n) {
+  int ans = 0;
+  for (int i = 0; i < A; i++)
+    fill(fst[i], fst[i] + A, -1),
+    fill(lst[i], lst[i] + A, -1);
+  for (int i = 0; i < n; i++)
+    for (int j = 0; j < n; j++)
+      ans += max(0, sqrEvil(i, j) - sqrGood(i, j));
+  return ans;
+}
+
+int main() {
+  ios::sync_with_stdio(0); cin.tie(0);
+  int u, v, p;
+  while (cin >> N >> p) {
+    for (int i = 0; i < N; i++)
+      for (int j = 0; j < N; j++)
+        num[i][j] = 0;
+    for (int i = 0; i < p; i++)
+      cin >> u >> v, num[u - 1][v - 1] = 1;
+    for (int i = 0; i < p; i++)
+      cin >> u >> v, num[u - 1][v - 1] = 2;
+    E = 2; G = 1;
+    cout << countSqrs(N) <<  ' ';
+    E = 1; G = 2;
+    cout << countSqrs(N) << '\n';
+  }
+  return 0;
+}
+
+
+Strickes
+
+#include <iostream>
+
+using namespace std;
+/*
+  Problema: Encuentra  el  cuadro  más  grande  de unos que
+            tenga un cuadrado de ceros rotado 45° inscrito:
+
+          11011
+          10001
+    101   00000
+    000   10001
+    101   11011
+*/
+
+const int M = 999;
+const int A = 200;
+
+int data[A][A];
+int accm[A][A];
+int memo[A][A];
+int N;
+
+// Encuentra el cuadrado de ceros más grande rotado 45° grados
+int maxsquare(int i, int j) {
+  if (i < 1  || i > N)
+    return 0;
+  if (j < 1  || j > N)
+    return 0;
+  if (data[i][j] == 1)
+    return 0;
+  if (memo[i][j] >= 0)
+    return memo[i][j];
+  int ans = M;
+  ans = min(ans, maxsquare(i - 1, j - 1));
+  ans = min(ans, maxsquare(i - 1, j    ));
+  ans = min(ans, maxsquare(i - 1, j + 1));
+  return memo[i][j] = 1 + ans;
+}
+
+void accumulate(int n) {
+  for (int i = 1; i <= n; i++) {
+    for (int j = 1; j <= n; j++) {
+      accm[i][j] = data[i][j];
+      if (i > 0) accm[i][j] += accm[i - 1][j    ];
+      if (j > 0) accm[i][j] += accm[i    ][j - 1];
+      if (i > 0 && j > 0) accm[i][j] -= accm[i - 1][j - 1];
+    }
+  }
+}
+
+int query(int i, int j, int u, int v) {
+  return accm[u][v] - accm[u][j - 1] - accm[i - 1][v] + accm[i - 1][j - 1];
+}
+
+
+// Encuentra el cuadrado de unos con un cuadrado rotado 45° inscrito
+int getans(int n) {
+  int mxn  = -1;
+  accumulate(n);
+  for (int i = 1; i <= n; i++)
+    for (int j = 1; j <= n; j++) {
+      int s = maxsquare(i, j);
+      if (s > 1 && s > mxn) {
+        int ones  = query(i - 2 * s + 2, j - s + 1, i, j + s - 1);
+        if (ones == 2 * s * (s - 1)) // verifica que la cantidad de unos sea correcta
+          mxn = maxsquare(i, j);
+      }
+    }
+  return 2 * mxn - 1;
+}
+
+int main() {
+  ios::sync_with_stdio(0); cin.tie(0);
+  while (cin >> N, N != 0) {
+    for (int i = 0; i < A; i++)
+      fill(memo[i], memo[i] + A, -1);
+    for (int i = 1; i <= N; i++)
+      for (int j = 1; j <= N; j++)
+        cin >> data[i][j];
+    int ans = getans(N);
+    if (ans < 0)
+      cout << "No solution\n";
+    else
+      cout << ans << '\n';
+  }
+  return 0;
+}
+
+
+
+
 /////////////////////// Alexis /////////////////////////////////
 //Calculo de coeficientes binomiales
 //Complejidad: O(n*k)
