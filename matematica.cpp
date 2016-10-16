@@ -141,10 +141,58 @@ Long Euclides(Long a, Long b,
 struct Fraccion {
     Long num, den;
     Fraccion() : num(0), den(1) {}
+
+    Fraccion (string decimal) {
+        int punto = decimal.find(".");
+        Fraccion entero(stol(decimal.substr(0, punto)), 1);
+
+        int reptend = decimal.find("(");
+        int L = reptend - punto - 1;
+        if (reptend < 0) L = decimal.size() - punto - 1;
+        Long n = (L > 0 ? stol(decimal.substr(punto + 1, L)) : 0);
+        Fraccion nonrep(n, Expo(10, L));
+
+        int offset = L;
+        L = decimal.size() - reptend - 2;
+        n = (reptend > 0 ? stol(decimal.substr(reptend + 1, L)) : 0);
+        Fraccion rep(n, stol(string(L, '9')) * Expo(10, offset));
+
+        Fraccion ans = entero + nonrep + rep;
+        num = ans.num;
+        den = ans.den;
+    }
+
     Fraccion(Long n, Long d) {
         if (d < 0) n = -n, d = -d;
         Long gcd = __gcd(abs(n), abs(d));
         num = n / gcd, den = d / gcd;
+    }
+
+    string toDecimal() {
+        string decimal = to_string(num/den) + '.';
+        if (num % den == 0)
+            return decimal += "0";
+        
+        int rem = num % den;
+        unordered_set<int> rept;
+        vector<int> digit, R; // R -> residuos
+
+        while (rem && !rept.count(rem)) {
+            rept.insert(rem);
+            R.push_back(rem);
+            rem *= 10;
+            digit.push_back(rem / den);
+            rem %= den; 
+        }
+
+        for (int i = 0; i < digit.size(); ++i) {
+            if (rem && R[i] == rem) // Empieza lo periodico
+                decimal += '(';
+            decimal += (digit[i] + '0');
+        }
+        if (rem)
+            decimal += ')';
+        return decimal;
     }
 
     Fraccion operator-() const {
