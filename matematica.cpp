@@ -142,22 +142,21 @@ struct Fraccion {
     Long num, den;
     Fraccion() : num(0), den(1) {}
 
-    Fraccion (string decimal) {
-        int punto = decimal.find(".");
-        Fraccion entero(stol(decimal.substr(0, punto)), 1);
+    Fraccion (string cad) {
+        int tam   = cad.size();
+        int punto = cad.find(".");
+        Fraccion ans(stol(cad.substr(0, punto)), 1);
 
-        int reptend = decimal.find("(");
-        int L = reptend - punto - 1;
-        if (reptend < 0) L = decimal.size() - punto - 1;
-        Long n = (L > 0 ? stol(decimal.substr(punto + 1, L)) : 0);
-        Fraccion nonrep(n, Expo(10, L));
+        int cycle = cad.find("(");
+        int  L = (cycle < 0 ? tam : cycle) - punto - 1;
+        Long n = (L > 0 ? stol(cad.substr(punto + 1, L)) : 0);
+        ans    = ans + Fraccion(n, Expo(10, L));
 
         int offset = L;
-        L = decimal.size() - reptend - 2;
-        n = (reptend > 0 ? stol(decimal.substr(reptend + 1, L)) : 0);
-        Fraccion rep(n, stol(string(L, '9')) * Expo(10, offset));
+        L   = tam - cycle - 2;
+        n   = (cycle > 0 ? stol(cad.substr(cycle + 1, L)) : 0);
+        ans = ans + Fraccion(n, stol(string(L, '9')) * Expo(10, offset));
 
-        Fraccion ans = entero + nonrep + rep;
         num = ans.num;
         den = ans.den;
     }
