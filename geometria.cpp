@@ -28,6 +28,14 @@ struct Punto {
     bool operator==(const Punto& cmp) const {
         return Igual(x, cmp.x) && Igual(y, cmp.y);
     } 
+
+	Punto operator-(const Punto& o) const {
+		return Punto(x - o.x, y - o.y);
+	}
+
+	Punto operator-() const {
+		return Punto(-x, -y);
+	}
 };
 
 // Distancia entre dos puntos p y q.
@@ -321,6 +329,67 @@ int PuntoEnConvexo(const Punto& p, const Poligono& P) {
         if (ManoDerecha(P[i - 1], P[i], p)
             != dir) return 0; // Fuera.
     return 1; // Dentro.
+}
+
+vector<int> mapeo;
+int mini = -1;
+void minVertice(const Poligono& poli) {
+	if (mini >= 0)
+		return;
+
+	mini = 0;
+	for (int i = 1; i < poli.size(); ++i)
+		if (poli[i] < poli[mini])
+			mini = i;
+
+	int tam = poli.size();
+	mapeo.assign(tam, 0);
+	for (int i = mini; i < tam; ++i)	mapeo[i] = i - mini;
+	for (int i = 0; i < mini; ++i)		mapeo[i] = tam - mini + 1 + i;
+}
+
+int OptPuntoEnConvexo(const Punto& query, const Poligono& poli, const int mini) {
+	int tam  = poli.size();
+	minVertice(poli);
+
+	int tope = (int)log2(tam) + 7;
+	int izq = (mini + 1) % tam;
+	int der = (mini - 1 + tam) % tam;
+	
+	Punto a, b, q;
+	a = poli[ mapeo[izq] ] - poli[ mapeo[mini] ];
+	b = poli[ mapeo[der] ] - poli[ mapeo[mini] ];
+	q = query - poli[ mapeo[mini] ];
+
+	// Esta en perimetro
+	if (Cruz(a, q) == 0 || Cruz(b, q) == 0) return -1;
+	if (Cruz(a, q) > 0 && Cruz(b, q) < 0)	return 0;
+
+	for (int i = 0; i < tope; ++i) {
+		if (izq + 1 == der) break;
+		int m = (izq + der) >> 1;
+		
+		a = poli[ mapeo[m] ] - poli[ mapeo[mini] ];
+		if (Cruz(a, q) < 0)
+			izq = m + 1;
+		else
+			der = m;
+	}
+
+	bool flag = false;
+	a = poli[ mapeo[izq] ] - poli[ mapeo[mini] ];
+	b = poli[ mapeo[der] ] - poli[ mapeo[mini] ];
+	
+	Punto ab =  b - a;
+	if (Cruz(ab, query - poli[ mapeo[izq] ]) == 0)
+		return -1;
+	if (Cruz(-a, query - poli[ mapeo[izq] ]) > 0 && Cruz(-b, query - poli[ mapeo[izq] ]) < 0)
+		flag = true;
+
+	if (Cruz(-b, query - poli[ mapeo[der] ]) < 0 && Cruz(-ab, query - poli[ mapeo[der] ]) < 0 && flag)
+		flag = true;
+
+	return (int)flag;
 }
 
 // Punto en poligono concavo por ray casting.
