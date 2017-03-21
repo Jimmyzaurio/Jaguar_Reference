@@ -60,6 +60,89 @@ struct Bipartito {
     }
 };
 
+typedef vector<int> vi;
+typedef vector< vi> vv;
+
+struct BipartiteGraph {
+  int  n;
+  int  m;
+  vi col;
+  vi row;
+  vv net;
+  vi vis;
+
+  BipartiteGraph(int n, int m): net(n), n(n), m(m) {}
+
+  void addEdge(int u, int v) {
+    net[u].push_back(v);
+  }
+
+  bool findMatch(int i) {
+    for (auto & j: net[i]) if (!vis[j]) {
+      vis[j] = true;
+      if (col[j] < 0 || findMatch(col[j])) {
+        row[i] = j;
+        col[j] = i;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  int maxMatching() {
+    int cnt = 0;
+    row = vi(n, -1);
+    col = vi(m, -1);
+    for (int i  = 0; i < n; i++)
+      vis = vi(m), cnt += findMatch(i);
+    return cnt;
+  }
+
+};
+
+
+struct Kuhn {
+
+    int n; Lista pareja;
+	Lista matching;
+    vector<Lista> aristas;
+    vector<bool> lado, visitado;
+	int izq, der;
+
+    Kuhn(int N) : lado(N), pareja(N),
+        visitado(N), aristas(N), n(N), 
+		izq(), der() {}
+
+    void AgregarArista(int u, int v) {
+        aristas[u].push_back(v);
+        aristas[v].push_back(u);
+    }
+
+    void AgregarIzq(int u) { lado[u] = true,  izq++; }
+    void AgregarDer(int u) { lado[u] = false, der++; }
+
+	int MaxMatching() {
+		matching.assign(der, -1);
+		int matches = 0;
+		for (int u = 0; u < izq; ++u)
+			matches += findPath(u);
+		return matches;	
+	}
+
+	bool findPath(int u) {
+		visitado[u] = true;
+		for (int v : aristas[u]) {
+			int node = matching[v];
+			if (node == -1 || (!visitado[node] && findPath(node)) ) {
+				matching[v] = u;
+				return true;
+			}
+		}
+		return false;
+	}
+};
+
+
 // FLUJO MAXIMO
 // Nodos indexados de 0 a n - 1.
 
@@ -420,3 +503,4 @@ struct GrafoFlujoCosto {
 int main() {
     return 0;
 }
+
