@@ -10,8 +10,8 @@ struct SegTree {
     int i, d;
     T dato;
 
-    SegTree(int i, int d):
-        i(i), d(d), dato(),
+    SegTree(int I, int D):
+        i(I), d(D), dato(),
         izq(NULL), der(NULL) {}
 
     SegTree(SegTree* st):
@@ -20,22 +20,22 @@ struct SegTree {
         izq(st->izq), i(st->i) {}
 
     ~SegTree(){
-        if (izq)  delete izq;
+        if (izq) delete izq;
         if (der) delete der;
     }
 
-    T build(vector<T>& Vo){
+    T build(vector<T>& data){
         if(i == d)
-            return dato = Vo[i & d];
+            return dato = data[i & d];
         int h = (i + d) >> 1;
         izq = new SegTree(i, h),
         der = new SegTree(h + 1, d);
-        return dato = izq->build(Vo) +
-                	  der->build(Vo);
+        return dato = izq->build(data) +
+                	     der->build(data);
     }
     
     SegTree* update(int p, T v){
-        if(p < i or d < p) return this;
+        if(p < i || d < p) return this;
 
         SegTree *copia;
         if (i == d) {
@@ -54,8 +54,8 @@ struct SegTree {
     }
 
     T query(int a, int b){
-        if(b < i or d < a)		return T();  
-        if(a <= i and d <= b)	return dato;
+        if(b < i || d < a)		 return T();  
+        if(a <= i && d <= b)	return dato;
         return izq->query(a, b) +
                der->query(a, b);
     }
