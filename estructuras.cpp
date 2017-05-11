@@ -180,6 +180,7 @@ struct BIT {
     }
 };
 
+// (x, y) se manejan como en el plano cartesiano, tal cual en los arreglos
 struct BIT2D {
     vector<BIT> matriz;
     BIT2D(int n) : matriz(n + 1, BIT(n)) {}
